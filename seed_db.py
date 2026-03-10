@@ -29,7 +29,7 @@ for t in tags:
 # Define Projects
 projects_data = [
     {
-        "name": "SMBShield / Nia RAG Intelligence",
+        "name": "SMB-Shield · Nia",
         "tagline": "NIS2 & Cybersecurity Compliance Platform — 5-Agent Pydantic AI System",
         "description": "5-agent architecture: SecurityGatekeeper, Librarian, Auditor, IntelligenceAnalyst, ReportManager. Multi-framework RAG knowledge base: NIS2, GDPR, ISO 27001, SOC2 in a single Qdrant index. Dual deployment: cloud SaaS + offline Mac Mini appliance for air-gapped clients.",
         "security_level": "CRITICAL",
@@ -135,7 +135,7 @@ projects_data = [
         "domain": "hospitality",
         "stack": ["Django 6.0", "Pydantic AI", "Qdrant", "HTMX", "TailwindCSS"],
         "order": 5,
-        "is_featured": False,
+        "is_featured": True,
         "security_model": {
             "threat_model": "PII exposure within vector embeddings.",
             "data_flow": "Documents scrubbed of PII before ingestion to the Qdrant index. Property-specific tenant segregation.",
@@ -145,9 +145,9 @@ projects_data = [
         },
     },
     {
-        "name": "Legal RAG Intelligence",
-        "tagline": "RAG Platform for Dutch Law Firms",
-        "description": "Legal document ingestion via Docling for court filings. Attorney-client privilege modeled as matter-level vector isolation.",
+        "name": "LegalFlow",
+        "tagline": "RAG Platform for Dutch Law Firms — Attorney-Client Privilege by Design",
+        "description": "Legal document ingestion via Docling for court filings. Attorney-client privilege modeled as matter-level vector isolation in Qdrant. NOvA-compliant audit trails.",
         "security_level": "HIGH",
         "domain": "legal",
         "stack": [
