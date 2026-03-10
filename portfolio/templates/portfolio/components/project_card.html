@@ -1,0 +1,57 @@
+<div class="tilt-wrapper" x-data="{
+        tiltX: 0, tiltY: 0,
+        onMove(e) {
+            const r = $el.getBoundingClientRect();
+            const x = e.clientX - r.left, y = e.clientY - r.top;
+            this.tiltY = ((x - r.width/2) / (r.width/2)) * 6;
+            this.tiltX = -((y - r.height/2) / (r.height/2)) * 4;
+        },
+        onLeave() { this.tiltX = 0; this.tiltY = 0; }
+    }" @mousemove="onMove($event)" @mouseleave="onLeave()">
+    <div class="obsidian-panel terminal-hover group relative border-t-4 rounded-xl p-8 transition-all cursor-pointer overflow-hidden flex flex-col
+    {% if project.security_level == 'CRITICAL' %}border-t-[var(--accent-red)]
+    {% elif project.security_level == 'HIGH' %}border-t-[var(--accent-orange)]
+    {% elif project.security_level == 'MEDIUM' %}border-t-[var(--accent-green)]
+    {% else %}border-t-[var(--accent-cyan)]
+    {% endif %}"
+        :style="`transform: rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0); box-shadow: 0 0 0 1px rgba(0,229,255,0.1), ${tiltX !== 0 || tiltY !== 0 ? '0 20px 60px -12px rgba(0,229,255,0.18), 0 8px 24px -8px rgba(0,0,0,0.8)' : '0 8px 24px -8px rgba(0,0,0,0.4)'}`">
+
+        <div class="absolute top-0 right-0 p-4">
+            <span class="mono text-[10px] text-white px-2 py-1 rounded font-bold
+            {% if project.security_level == 'CRITICAL' %}bg-[var(--accent-red)]
+            {% elif project.security_level == 'HIGH' %}bg-[var(--accent-orange)]
+            {% elif project.security_level == 'MEDIUM' %}bg-[var(--accent-green)]
+            {% else %}bg-[var(--accent-cyan)]
+            {% endif %}">
+                {{ project.security_level }}
+            </span>
+        </div>
+
+        <div class="mono text-[var(--accent-cyan)] text-xs mb-4 uppercase">{{ project.get_domain_display }}</div>
+
+        <h3 class="text-2xl font-bold mb-4 group-hover:text-[var(--accent-cyan)] transition-colors">
+            <a href="{% url 'project-detail' project.slug %}" class="after:absolute after:inset-0">{{ project.name
+                }}</a>
+        </h3>
+
+        <p class="text-[var(--text-secondary)] text-sm mb-6 leading-relaxed flex-grow">
+            {{ project.tagline }}
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-8">
+            {% for tag in project.stack.all %}
+            <span class="mono text-[9px] bg-[var(--bg-elevated)] px-2 py-1 rounded border border-[var(--border)]">{{
+                tag.name }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="flex items-center justify-between mt-auto">
+            <span class="mono text-[10px] text-[var(--accent-orange)]">VIEW_THREAT_MODEL -></span>
+            <svg xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 text-[var(--text-secondary)] group-hover:text-[var(--accent-cyan)] transition-colors"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+        </div>
+    </div>
+</div>

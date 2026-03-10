@@ -1,0 +1,8 @@
+{% for project in projects %}
+{% include 'portfolio/components/project_card.html' with project=project %}
+{% empty %}
+<div
+    class="col-span-3 py-12 text-center text-[var(--text-secondary)] mono border border-dashed border-[var(--border)]">
+    No indexed files found matching criteria.
+</div>
+{% endfor %}

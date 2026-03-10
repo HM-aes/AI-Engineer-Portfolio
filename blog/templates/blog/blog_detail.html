@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} | Engineering Log{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 py-12 flex flex-col gap-8">
+
+    <header class="border-b border-[var(--border)] pb-8">
+        <a href="{% url 'blog-list' %}"
+            class="inline-flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] font-mono mono text-sm mb-6 transition-colors">
+            <span class="mr-2">←</span> cd /var/log/engineering
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-mono mono text-[var(--accent-cyan)] font-bold mb-4">
+            {{ post.title }}
+        </h1>
+
+        <div class="flex items-center gap-4 text-sm font-mono mono text-[var(--text-secondary)]">
+            <time>timestamp: {{ post.created_at|date:"Y-m-d H:i:s" }}</time>
+            <span>|</span>
+            <span>author: root</span>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mt-6">
+            {% for tag in post.tags.all %}
+            <span
+                class="text-xs font-mono mono text-[var(--accent-orange)] border border-[var(--accent-orange)]/30 bg-[var(--accent-orange)]/10 px-2 py-1">
+                {{ tag.name }}
+            </span>
+            {% endfor %}
+        </div>
+    </header>
+
+    <!-- Markdown Content Render -->
+    <!-- Note: using Prose classes requires prose plugin, but we can style natively or add Tailwind typography -->
+    <article
+        class="prose prose-invert prose-pre:bg-[var(--bg-elevated)] prose-pre:border prose-pre:border-[var(--border)] prose-a:text-[var(--accent-cyan)] max-w-none text-[var(--text-primary)] leading-relaxed">
+        {{ rendered_body|safe }}
+    </article>
+
+</div>
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}About | Hassan Mohamed{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto flex flex-col gap-16 py-12 px-6">
+
+    <!-- Header -->
+    <header class="border-b border-[var(--border)] pb-8">
+        <h1 class="text-4xl mono font-bold text-[var(--accent-orange)] mb-4">
+            > whois hassan_mohamed
+        </h1>
+        <p class="text-xl text-[var(--text-secondary)]">
+            AI Solutions Architect @ Nia RAG Intelligence
+        </p>
+    </header>
+
+    <!-- Bio Statement -->
+    <section class="obsidian-panel p-8 relative rounded-lg">
+        <div
+            class="absolute -top-3 left-8 bg-[var(--bg-base)] px-2 text-[var(--accent-cyan)] mono text-sm">
+            bio.txt
+        </div>
+        <div class="space-y-4 text-lg leading-relaxed text-[var(--text-primary)]">
+            <p>
+                I build AI systems that pass Google's Trust & Safety bar, applying adversarial thinking from Meta-scale
+                content moderation to Benelux enterprise RAG.
+            </p>
+            <p>
+                I don't just assemble API calls. I design offline and online RAG architectures where security,
+                compliance, and hallucination reduction are fundamental constraints built into the foundation.
+            </p>
+            <p class="text-[var(--text-secondary)] mono text-sm mt-4 uppercase tracking-widest">
+                Languages: [NL] Dutch (Native), [EN] English (Fluent), [AR] Arabic
+            </p>
+        </div>
+    </section>
+
+    <!-- Career Timeline -->
+    <section>
+        <h2 class="text-2xl mono font-bold text-[var(--accent-cyan)] mb-12">// execution_trace: career</h2>
+
+        <div class="border-l-2 border-[var(--border)] ml-4 space-y-12">
+            <!-- Nia -->
+            <div class="relative pl-8">
+                <div
+                    class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[var(--accent-green)] border-4 border-[var(--bg-base)] pulse-red">
+                </div>
+                <h3 class="text-xl font-bold">Nia RAG Intelligence</h3>
+                <p class="text-sm mono text-[var(--accent-purple)] mb-2 uppercase tracking-widest">Present — AI Solutions Architect</p>
+                <p class="text-[var(--text-secondary)]">Architecting enterprise multi-agent RAG pipelines
+                    compliant with NIS2 and GDPR.</p>
+            </div>
+
+            <!-- Google -->
+            <div class="relative pl-8 opacity-80 hover:opacity-100 transition-opacity">
+                <div
+                    class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[var(--border)] border-4 border-[var(--bg-base)]">
+                </div>
+                <h3 class="text-xl font-bold">Google</h3>
+                <p class="text-sm mono text-[var(--accent-purple)] mb-2 uppercase tracking-widest">AI Trust & Safety</p>
+                <p class="text-[var(--text-secondary)]">Defined adversarial safety barriers for foundational LLM
+                    rollouts.</p>
+            </div>
+
+            <!-- Meta -->
+            <div class="relative pl-8 opacity-80 hover:opacity-100 transition-opacity">
+                <div
+                    class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[var(--border)] border-4 border-[var(--bg-base)]">
+                </div>
+                <h3 class="text-xl font-bold">Meta</h3>
+                <p class="text-sm mono text-[var(--accent-purple)] mb-2 uppercase tracking-widest">Content Moderation Systems</p>
+                <p class="text-[var(--text-secondary)]">Scaled threat detection and automated moderation
+                    classifiers globally.</p>
+            </div>
+
+            <!-- Apple -->
+            <div class="relative pl-8 opacity-80 hover:opacity-100 transition-opacity">
+                <div
+                    class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-[var(--border)] border-4 border-[var(--bg-base)]">
+                </div>
+                <h3 class="text-xl font-bold">Apple</h3>
+                <p class="text-sm mono text-[var(--accent-purple)] mb-2 uppercase tracking-widest">Software Engineering</p>
+                <p class="text-[var(--text-secondary)]">Core system engineering and privacy-first architectural
+                    paradigms.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Block -->
+    <section class="my-8 text-center border-y border-[var(--border)] py-12">
+        <blockquote class="text-2xl mono italic text-[var(--text-primary)] max-w-2xl mx-auto">
+            "I don't build AI that works. I build AI that can be trusted — by enterprises, by regulators, and by the
+            people whose data it processes."
+        </blockquote>
+    </section>
+
+</div>
+{% endblock %}

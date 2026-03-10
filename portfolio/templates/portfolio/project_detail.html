@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ project.name }} | RAG Architecture{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-12 flex flex-col gap-8">
+
+    <!-- Header -->
+    <header class="border-b border-[var(--border)] pb-8 relative">
+        <a href="{% url 'projects' %}"
+            class="inline-flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] font-mono mono text-sm mb-6 transition-colors">
+            <span class="mr-2">←</span> cd ..
+        </a>
+
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-mono mono text-[var(--accent-cyan)] font-bold mb-2">
+                    // {{ project.name }}
+                </h1>
+                <p class="text-xl text-[var(--text-primary)]">
+                    {{ project.tagline }}
+                </p>
+            </div>
+
+            <!-- Security Badge -->
+            <div class="hidden sm:block">
+                <div class="px-4 py-2 font-mono mono text-sm border 
+                    {% if project.security_level == 'CRITICAL' %}text-[var(--accent-red)] border-[var(--accent-red)]/50 bg-[var(--accent-red)]/10
+                    {% elif project.security_level == 'HIGH' %}text-[var(--accent-orange)] border-[var(--accent-orange)]/50 bg-[var(--accent-orange)]/10
+                    {% elif project.security_level == 'MEDIUM' %}text-[var(--accent-orange)] border-[var(--accent-orange)]/50 bg-[var(--accent-orange)]/10
+                    {% else %}text-[var(--accent-cyan)] border-[var(--accent-cyan)]/50 bg-[var(--accent-cyan)]/10
+                    {% endif %}
+                ">
+                    SEV: {{ project.security_level }}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Alpine.js Tabs -->
+    <div x-data="{ tab: 'security' }" class="flex flex-col md:flex-row gap-8">
+
+        <!-- Tab Navigation (Sidebar style) -->
+        <div
+            class="w-full md:w-1/4 flex flex-row md:flex-col gap-2 overflow-x-auto border-b md:border-b-0 md:border-r border-[var(--border)] md:pr-4 pb-4 md:pb-0 font-mono mono text-sm font-bold">
+            <button @click="tab = 'security'"
+                :class="{'text-[var(--accent-red)] border-[var(--accent-red)]': tab === 'security', 'text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)] hover:border-[var(--border)]': tab !== 'security'}"
+                class="px-4 py-3 text-left border-l-2 transition-colors whitespace-nowrap">
+                [ Security_Model ]
+            </button>
+            <button @click="tab = 'overview'"
+                :class="{'text-[var(--accent-cyan)] border-[var(--accent-cyan)]': tab === 'overview', 'text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)] hover:border-[var(--border)]': tab !== 'overview'}"
+                class="px-4 py-3 text-left border-l-2 transition-colors whitespace-nowrap">
+                [ Overview ]
+            </button>
+            <button @click="tab = 'architecture'"
+                :class="{'text-[var(--accent-cyan)] border-[var(--accent-cyan)]': tab === 'architecture', 'text-[var(--text-secondary)] border-transparent hover:text-[var(--text-primary)] hover:border-[var(--border)]': tab !== 'architecture'}"
+                class="px-4 py-3 text-left border-l-2 transition-colors whitespace-nowrap">
+                [ Architecture ]
+            </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="w-full md:w-3/4 min-h-[400px]">
+
+            <!-- Security Model Tab (MANDATORY per PRD) -->
+            <div x-show="tab === 'security'" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                class="space-y-8">
+
+                <div class="obsidian-panel border-[var(--accent-red)]/30 rounded-lg p-6">
+                    <h2 class="text-xl font-mono mono text-[var(--accent-red)] mb-4">/* Threat Model */</h2>
+                    <p class="text-[var(--text-primary)] leading-relaxed">{{ project.security_model.threat_model
+                        }}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="obsidian-panel rounded-lg p-6">
+                        <h2 class="text-xl font-mono mono text-[var(--accent-green)] mb-4">/* Data Flow */</h2>
+                        <p class="text-[var(--text-secondary)] text-sm leading-relaxed">{{
+                            project.security_model.data_flow }}</p>
+                    </div>
+
+                    <div class="obsidian-panel rounded-lg p-6">
+                        <h2 class="text-xl font-mono mono text-[var(--accent-purple)] mb-4">/* Access Control */</h2>
+                        <p class="text-[var(--text-secondary)] text-sm leading-relaxed">{{
+                            project.security_model.access_control }}</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-4 mt-6">
+                    <div class="obsidian-panel p-4 rounded-lg flex-grow">
+                        <h3 class="font-mono mono text-[var(--text-primary)] mb-2 text-sm">Regulatory Map</h3>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            {% for ref in project.security_model.compliance_refs %}
+                            <span
+                                class="text-xs font-mono mono px-2 py-1 bg-[var(--bg-elevated)] border border-[var(--text-secondary)] text-[var(--text-primary)]">{{
+                                ref }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lazy Loaded HTMX Metrics Panel -->
+                <div hx-get="{% url 'htmx_project_metrics' project.slug %}" hx-trigger="intersect once">
+                    <div
+                        class="p-6 text-center text-[var(--text-secondary)] font-mono mono animate-pulse border border-[var(--border)] border-dashed rounded-lg obsidian-panel">
+                        [ Fetching active compliance metrics ... ]
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overview Tab -->
+            <div x-show="tab === 'overview'" style="display: none;"
+                x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0" class="space-y-6">
+
+                <div class="obsidian-panel rounded-lg p-6">
+                    <h2 class="text-xl font-mono mono text-[var(--accent-cyan)] mb-4">/* Executive Summary */</h2>
+                    <p class="text-[var(--text-primary)] leading-relaxed text-lg">
+                        {{ project.description }}
+                    </p>
+                </div>
+
+                {% if project.github_url or project.live_url %}
+                <div class="flex gap-4 font-mono mono text-xs uppercase tracking-widest mt-8">
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" target="_blank"
+                        class="px-6 py-2 bg-[var(--accent-cyan)] text-[var(--bg-base)] font-bold hover:bg-[var(--text-primary)] transition-colors">
+                        [ ./run_demo.sh ]
+                    </a>
+                    {% endif %}
+                    {% if project.github_url %}
+                    <a href="{{ project.github_url }}" target="_blank"
+                        class="px-6 py-2 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] hover:bg-[var(--accent-cyan)]/10 transition-colors">
+                        [ cat source_code ]
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Architecture Tab -->
+            <div x-show="tab === 'architecture'" style="display: none;"
+                x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0">
+
+                <div class="flex flex-col gap-6">
+                    <div class="bg-[var(--bg-base)] border border-[var(--border)] rounded-lg p-6">
+                        <h2 class="text-xl font-mono mono text-[var(--accent-orange)] mb-4">/* Core Infrastructure */
+                        </h2>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                            {% for tech in project.stack.all %}
+                            <span
+                                class="text-sm font-mono mono px-3 py-1 bg-[var(--bg-elevated)] border border-[var(--accent-purple)]/50 text-[var(--accent-purple)]">{{
+                                tech.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+{% endblock %}

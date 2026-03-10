@@ -1,0 +1,388 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}hassan.dev — Security-First AI Architect{% endblock %}</title>
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"
+        integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+        crossorigin="anonymous"></script>
+
+    <!-- Alpine.js Intersect Plugin (must load before Alpine core) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Tailwind CSS (compiled via CLI) -->
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+
+    <!-- Google Fonts implementation for JetBrains Mono & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-base: #0D1117;
+            --bg-surface: #161B22;
+            --bg-elevated: #21262D;
+            --border: #30363D;
+            --text-primary: #E6EDF3;
+            --text-secondary: #8B949E;
+            --accent-cyan: #00E5FF;
+            --accent-orange: #FF6B35;
+            --accent-green: #39D353;
+            --accent-red: #FF4444;
+            --accent-purple: #BB8FCE;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .obsidian-panel {
+            background: linear-gradient(145deg, #161B22 0%, #0D1117 100%);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tilt-wrapper {
+            perspective: 900px;
+            perspective-origin: center center;
+        }
+
+        .terminal-hover {
+            transition: transform 0.08s ease-out, box-shadow 0.25s ease;
+            will-change: transform;
+        }
+
+        .tilt-wrapper .terminal-hover {
+            transform-style: preserve-3d;
+            transition: transform 0.08s ease-out, box-shadow 0.25s ease;
+        }
+
+        .tilt-wrapper:not(:hover) .terminal-hover {
+            transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.55s ease;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 229, 255, 0.03);
+            position: absolute;
+            animation: scan 4s linear infinite;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        .glitch-text {
+            text-shadow: 2px 0 var(--accent-red), -2px 0 var(--accent-cyan);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-1px, 1px);
+            }
+
+            40% {
+                transform: translate(-1px, -1px);
+            }
+
+            60% {
+                transform: translate(1px, 1px);
+            }
+
+            80% {
+                transform: translate(1px, -1px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        .pulse-red {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .5;
+                transform: scale(1.2);
+            }
+        }
+
+        .terminal-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .terminal-container::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+
+        .security-grid-pattern {
+            background-image: radial-gradient(var(--border) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .tab-active {
+            border-bottom: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .animate-marquee {
+            display: inline-flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        /* ── Scroll-reveal animations ── */
+        .sr {
+            opacity: 0;
+            transform: translateY(64px);
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--sr-delay, 0s);
+        }
+
+        .sr.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .sr-left {
+            opacity: 0;
+            transform: translateX(-72px);
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--sr-delay, 0s);
+        }
+
+        .sr-left.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .sr-right {
+            opacity: 0;
+            transform: translateX(72px);
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--sr-delay, 0s);
+        }
+
+        .sr-right.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        .sr-scale {
+            opacity: 0;
+            transform: scale(0.94) translateY(32px);
+            transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--sr-delay, 0s);
+        }
+
+        .sr-scale.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Nav beam — shines downward from the navbar */
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 120px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(0, 229, 255, 0.22) 0%, transparent 75%);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body x-data="{ mobileMenu: false, activeTab: 'overview' }" x-init="window.scrollTo({top:0,behavior:'instant'})"
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <!-- Global Scanline Overlay -->
+    <div class="scanline"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-[#30363D] bg-[#0D1117]/80 backdrop-blur-md relative" x-data="{
+            active: 'hero',
+            go(sectionId, fallbackUrl) {
+                const el = document.getElementById(sectionId);
+                if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    this.mobileMenu = false;
+                } else {
+                    window.location.href = fallbackUrl;
+                }
+            },
+            initObserver() {
+                const sections = ['hero','projects','architecture','contact'];
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(e => { if (e.isIntersecting) this.active = e.target.id; });
+                }, { rootMargin: '-40% 0px -55% 0px' });
+                sections.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+            }
+        }" x-init="initObserver()">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="{% url 'home' %}" @click.prevent="go('hero', '{% url 'home' %}')"
+                    class="flex flex-col gap-0 group">
+                    <span class="font-bold text-[15px] tracking-tight transition-opacity group-hover:opacity-80"
+                        style="font-family:'Syne',sans-serif; color:#00E5FF; line-height:1.1;">Nia Intelligence</span>
+                </a>
+
+                <div
+                    class="hidden md:flex items-center space-x-2 bg-black/30 px-3 py-1 rounded-full border border-emerald-500/20">
+                    <div class="w-2 h-2 bg-[var(--accent-green)] rounded-full pulse-red"></div>
+                    <span class="mono text-[10px] uppercase tracking-widest text-[var(--accent-green)]">Systems
+                        Operational</span>
+                </div>
+            </div>
+
+            <div class="hidden md:flex space-x-8 mono text-xs uppercase tracking-widest">
+                <a href="{% url 'home' %}" @click.prevent="go('hero', '{% url 'home' %}')"
+                    :class="active === 'hero' ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-secondary)] hover:text-[var(--accent-cyan)]'"
+                    class="transition-colors relative group">
+                    ./~
+                    <span class="absolute -bottom-1 left-0 h-px bg-[var(--accent-cyan)] transition-all duration-300"
+                        :class="active === 'hero' ? 'w-full' : 'w-0 group-hover:w-full'"></span>
+                </a>
+                <a href="{% url 'projects' %}" @click.prevent="go('projects', '{% url 'projects' %}')"
+                    :class="active === 'projects' ? 'text-[var(--accent-cyan)]' : 'text-[var(--text-secondary)] hover:text-[var(--accent-cyan)]'"
+                    class="transition-colors relative group">
+                    ./projects
+                    <span class="absolute -bottom-1 left-0 h-px bg-[var(--accent-cyan)] transition-all duration-300"
+                        :class="active === 'projects' ? 'w-full' : 'w-0 group-hover:w-full'"></span>
+                </a>
+                <a href="{% url 'cv' %}" @click.prevent="go('cv', '{% url 'cv' %}')"
+                    class="text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors relative group">
+                    ./cv
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-px bg-[var(--accent-cyan)] group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="{% url 'about' %}" @click.prevent="go('about', '{% url 'about' %}')"
+                    class="text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors relative group">
+                    ./about
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-px bg-[var(--accent-cyan)] group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="{% url 'blog-list' %}" @click.prevent="go('blog', '{% url 'blog-list' %}')"
+                    class="text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors relative group">
+                    ./blog
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-px bg-[var(--accent-cyan)] group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="{% url 'security' %}" @click.prevent="go('security', '{% url 'security' %}')"
+                    class="text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] transition-colors relative group">
+                    ./security
+                    <span
+                        class="absolute -bottom-1 left-0 w-0 h-px bg-[var(--accent-cyan)] group-hover:w-full transition-all duration-300"></span>
+                </a>
+                <a href="{% url 'contact' %}" @click.prevent="go('contact', '{% url 'contact' %}')"
+                    :class="active === 'contact' ? 'bg-white text-black' : 'bg-[var(--accent-cyan)] text-black hover:bg-white'"
+                    class="px-4 py-1 font-bold transition-all">./contact</a>
+            </div>
+
+            <button @click="mobileMenu = !mobileMenu" class="md:hidden p-2 text-[var(--text-secondary)]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div x-show="mobileMenu" x-transition
+            class="md:hidden bg-[#0D1117] border-b border-[#30363D] py-4 px-6 space-y-4 mono text-xs uppercase tracking-widest">
+            <a href="{% url 'home' %}" @click.prevent="go('hero', '{% url 'home' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./~</a>
+            <a href="{% url 'projects' %}" @click.prevent="go('projects', '{% url 'projects' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./projects</a>
+            <a href="{% url 'cv' %}" @click.prevent="go('cv', '{% url 'cv' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./cv</a>
+            <a href="{% url 'about' %}" @click.prevent="go('about', '{% url 'about' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./about</a>
+            <a href="{% url 'blog-list' %}" @click.prevent="go('blog', '{% url 'blog-list' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./blog</a>
+            <a href="{% url 'security' %}" @click.prevent="go('security', '{% url 'security' %}')"
+                class="block hover:text-[var(--accent-cyan)] transition-colors">./security</a>
+            <a href="{% url 'contact' %}" @click.prevent="go('contact', '{% url 'contact' %}')"
+                class="block text-[var(--accent-cyan)] font-bold">./contact</a>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[var(--border)] py-12 px-6 mt-12">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="mono text-[10px] text-[var(--text-secondary)]">
+                &copy; 2026 HASSAN.DEV | NIA RAG INTELLIGENCE | ALL RIGHTS SECURED
+            </div>
+            <div class="flex space-x-8 mono text-[10px] text-[var(--text-secondary)] uppercase">
+                <a href="#" class="hover:text-[var(--accent-cyan)]">Sitemap.xml</a>
+                <a href="#" class="hover:text-[var(--accent-cyan)]">Security.txt</a>
+                <a href="#" class="hover:text-[var(--accent-cyan)]">PGP_Key</a>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="mono text-[10px] text-[var(--accent-green)]">TLS 1.3 ENABLED</span>
+                <div class="w-2 h-2 bg-[var(--accent-green)] rounded-full"></div>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

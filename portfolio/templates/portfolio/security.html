@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Security & Compliance | Hassan Mohamed{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12 flex flex-col gap-12">
+
+    <!-- Header -->
+    <header class="border-b border-[var(--border)] pb-8">
+        <h1 class="text-4xl font-mono mono text-[var(--accent-orange)] mb-4">
+            > cat /etc/security_policy
+        </h1>
+        <p class="text-[var(--text-secondary)]">
+            Active security headers and architectural guarantees for hassan.dev
+        </p>
+    </header>
+
+    <!-- Live Headers -->
+    <section>
+        <h2 class="text-2xl font-mono mono text-[var(--accent-cyan)] mb-6">// live_headers</h2>
+        <div
+            class="obsidian-panel rounded-lg p-6 font-mono mono text-sm shadow-xl">
+            <div class="text-[var(--accent-green)] mb-4">HTTP/2 200 OK</div>
+            {% for header, value in headers.items %}
+            <div class="mb-2 break-all">
+                <span class="text-[var(--accent-orange)]">{{ header }}:</span>
+                <span class="text-[var(--text-primary)]">{{ value }}</span>
+            </div>
+            {% endfor %}
+            <div class="mt-6 border-t border-[var(--border)] pt-4 text-[var(--text-secondary)]">
+                [ Note: These are the exact headers enforced by Whitenoise and Django middleware on this deployment. ]
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Tenets -->
+    <section>
+        <h2 class="text-2xl font-mono mono text-[var(--accent-purple)] mb-6">// architecture_tenets</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div
+                class="obsidian-panel border-[var(--accent-red)]/30 rounded-lg p-6 hover:border-[var(--accent-red)] transition-colors">
+                <h3 class="text-lg font-mono mono text-[var(--accent-red)] mb-2">01. Zero JS Fallback</h3>
+                <p class="text-[var(--text-secondary)] text-sm">
+                    No vanilla JavaScript is executed. The site relies entirely on HTMX for server-driven UI and
+                    Alpine.js for deterministic micro-interactions.
+                </p>
+            </div>
+            <div
+                class="obsidian-panel border-[var(--accent-cyan)]/30 rounded-lg p-6 hover:border-[var(--accent-cyan)] transition-colors">
+                <h3 class="text-lg font-mono mono text-[var(--accent-cyan)] mb-2">02. Data Locality</h3>
+                <p class="text-[var(--text-secondary)] text-sm">
+                    All RAG implementations prefer embedded vector stores (Qdrant) and local LLMs (Ollama) to guarantee
+                    data sovereignty.
+                </p>
+            </div>
+            <div
+                class="obsidian-panel border-[var(--accent-green)]/30 rounded-lg p-6 hover:border-[var(--accent-green)] transition-colors">
+                <h3 class="text-lg font-mono mono text-[var(--accent-green)] mb-2">03. Strict CSP</h3>
+                <p class="text-[var(--text-secondary)] text-sm">
+                    Content Security Policy restricts script execution and asset loading strictly to trusted origins.
+                    (See headers above).
+                </p>
+            </div>
+            <div
+                class="obsidian-panel border-[var(--accent-orange)]/30 rounded-lg p-6 hover:border-[var(--accent-orange)] transition-colors">
+                <h3 class="text-lg font-mono mono text-[var(--accent-orange)] mb-2">04. ASVS L2 Aligned</h3>
+                <p class="text-[var(--text-secondary)] text-sm">
+                    Architectural decisions align with the OWASP Application Security Verification Standard (ASVS) Level
+                    2.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

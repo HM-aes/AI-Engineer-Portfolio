@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Engineer Portfolio specializing in RAG Architecture">
+    <title>AI Engineer | RAG Architect</title>
+    
+    <!-- Tailwind CSS (via CDN for simplicity without build step) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        dark: {
+                            bg: '#0f172a',    // slate-900
+                            card: '#1e293b',  // slate-800
+                            border: '#334155' // slate-700
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass-panel {
+                @apply bg-dark-card/60 backdrop-blur-xl border border-white/10 shadow-2xl;
+            }
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-500;
+            }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-slate-300 font-sans antialiased selection:bg-brand-500/30 selection:text-white"
+      x-data="{ scrolled: false }"
+      @scroll.window="scrolled = (window.pageYOffset > 50)">
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob"></div>
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute -bottom-32 left-1/2 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob" style="animation-delay: 4s;"></div>
+        <!-- Noise Texture Overlay -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav :class="{'glass-panel py-3': scrolled, 'bg-transparent py-6': !scrolled}" 
+         class="fixed w-full top-0 z-50 transition-all duration-300 px-6 lg:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <a href="#" class="text-xl font-bold text-white tracking-tighter">
+                <span class="text-brand-500">&gt;_</span> AI_Eng
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">About</a>
+                <a href="#expertise" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Expertise</a>
+                <a href="#projects" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">RAG Systems</a>
+                <a href="#contact" class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-slate-300 hover:text-white" x-data="{ open: false }" @click="open = !open">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="relative z-10 flex flex-col min-h-screen">
+        
+        <!-- Hero Section -->
+        <section class="flex flex-col items-center justify-center min-h-screen px-6 pt-20 text-center">
+            <div class="max-w-4xl space-y-8 animate-fade-in-up">
+                <div class="inline-flex items-center px-3 py-1 rounded-full border border-brand-500/30 bg-brand-500/10 text-brand-400 text-xs font-medium tracking-wide font-mono mb-4">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 mr-2 animate-pulse"></span> Open for Opportunities
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight leading-tight">
+                    Architecting the Future of <br class="hidden md:block"/>
+                    <span class="text-gradient">AI & RAG Systems</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                    Specializing in designing, optimizing, and deploying highly scalable Offline and Online Retrieval-Augmented Generation architectures. Bridging the gap between LLMs and enterprise data.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <a href="#projects" class="px-8 py-3 rounded-lg bg-white text-dark-bg font-semibold hover:bg-slate-200 transition-colors shadow-lg shadow-white/10 group flex items-center gap-2">
+                        View Architectures
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </a>
+                    <a href="#contact" class="px-8 py-3 rounded-lg border border-white/20 text-white font-semibold hover:bg-white/5 transition-colors backdrop-blur-sm">
+                        Let's Talk
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-12 animate-bounce flex flex-col items-center text-slate-500">
+                <span class="text-xs uppercase tracking-widest font-mono mb-2">Scroll</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="py-24 px-6 lg:px-12 relative max-w-7xl mx-auto w-full">
+            <div class="space-y-4 mb-16 text-center md:text-left">
+                <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-brand-500">/</span> Core Expertise</h2>
+                <p class="text-slate-400 max-w-2xl text-lg">Mastering the complexities of bringing LLMs to production through advanced retrieval systems.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-lg bg-brand-500/20 flex items-center justify-center mb-6 text-brand-400 group-hover:bg-brand-500 group-hover:text-dark-bg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Offline & Online RAG</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Designing pipelines for scheduled batch embedding (Offline) and real-time query interception & augmentation (Online) ensuring low latency and high relevance.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center mb-6 text-blue-400 group-hover:bg-blue-500 group-hover:text-dark-bg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Vector Search Tuning</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Optimizing dense, sparse, and hybrid search methods. Handling chunking strategies, metadata filtering, and re-ranking algorithms (e.g., Cohere, Cross-Encoders).
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel p-8 rounded-2xl hover:-translate-y-2 transition-transform duration-300 group">
+                    <div class="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center mb-6 text-purple-400 group-hover:bg-purple-500 group-hover:text-dark-bg transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Backend Engineering</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Building robust APIs with Python (Django, FastAPI), integrating orchestration frameworks (LangChain, LlamaIndex), and managing vector databases (Pinecone, Qdrant).
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architectures / Projects Section (Using Alpine for interactivity) -->
+        <section id="projects" class="py-24 px-6 lg:px-12 relative max-w-7xl mx-auto w-full border-t border-white/5">
+            <div class="space-y-4 mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white"><span class="text-brand-500">/</span> Architecture Showcase</h2>
+                <p class="text-slate-400 text-lg">Selected RAG implementations demonstrating scale and accuracy.</p>
+            </div>
+
+            <!-- Alpine Component for Tabs -->
+            <div x-data="{ activeTab: 'enterprise' }" class="flex flex-col lg:flex-row gap-8">
+                
+                <!-- Tab Controls -->
+                <div class="lg:w-1/3 flex flex-col space-y-2">
+                    <button @click="activeTab = 'enterprise'" 
+                            :class="{'bg-brand-500/20 border-brand-500 text-white': activeTab === 'enterprise', 'border-transparent text-slate-400 hover:text-white hover:bg-white/5': activeTab !== 'enterprise'}"
+                            class="text-left px-6 py-4 rounded-xl border-l-2 transition-all duration-300 text-lg font-medium content-start">
+                        Enterprise Knowledge Base
+                        <span class="block text-xs font-mono mt-1 opacity-70">LangChain · Qdrant · Django</span>
+                    </button>
+                    
+                    <button @click="activeTab = 'realtime'" 
+                            :class="{'bg-blue-500/20 border-blue-500 text-white': activeTab === 'realtime', 'border-transparent text-slate-400 hover:text-white hover:bg-white/5': activeTab !== 'realtime'}"
+                            class="text-left px-6 py-4 rounded-xl border-l-2 text-lg font-medium transition-all duration-300">
+                        Real-time Support Agent
+                        <span class="block text-xs font-mono mt-1 opacity-70">LlamaIndex · Redis · WebSockets</span>
+                    </button>
+
+                    <button @click="activeTab = 'hybrid'" 
+                            :class="{'bg-purple-500/20 border-purple-500 text-white': activeTab === 'hybrid', 'border-transparent text-slate-400 hover:text-white hover:bg-white/5': activeTab !== 'hybrid'}"
+                            class="text-left px-6 py-4 rounded-xl border-l-2 text-lg font-medium transition-all duration-300">
+                        Hybrid Search Engine
+                        <span class="block text-xs font-mono mt-1 opacity-70">Elasticsearch · Pinecone · Cohere</span>
+                    </button>
+                </div>
+
+                <!-- Tab Content -->
+                <div class="lg:w-2/3">
+                    <div class="glass-panel p-8 rounded-2xl h-full relative overflow-hidden">
+                        
+                        <!-- Content: Enterprise -->
+                        <div x-show="activeTab === 'enterprise'" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white">Offline Ingestion Pipeline</h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                A highly parallelized ingestion pipeline built with Python and Celery. It processes thousands of internal PDFs and Confluence pages daily. Implements semantic chunking and layout-aware parsing before embedding via OpenAI's text-embedding-3-large into a Qdrant cluster.
+                            </p>
+                            <div class="p-4 bg-dark-bg/50 rounded-lg border border-white/5 font-mono text-sm text-brand-300">
+                                ❯ Architecture highlight: Metadata-enriched chunking <br>
+                                ❯ Scale: 5M+ vectors, >95% retrieval accuracy@K=5
+                            </div>
+                        </div>
+
+                        <!-- Content: Real-time -->
+                        <div x-show="activeTab === 'realtime'" style="display: none;"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white">Online Streaming Orchestrator</h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Low-latency RAG implementation for customer-facing chatbots. Intercepts queries, applies query expansion via a small LM, and retrieves context from Redis vector hashes in under 150ms. Streams LLM responses back via WebSockets.
+                            </p>
+                            <div class="p-4 bg-dark-bg/50 rounded-lg border border-white/5 font-mono text-sm text-blue-300">
+                                ❯ Architecture highlight: Query rewriting & routing <br>
+                                ❯ Latency: P99 < 800ms TTFT (Time To First Token)
+                            </div>
+                        </div>
+
+                        <!-- Content: Hybrid -->
+                        <div x-show="activeTab === 'hybrid'" style="display: none;"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-y-4"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             class="space-y-6">
+                            <h3 class="text-2xl font-bold text-white">Advanced Re-ranking Engine</h3>
+                            <p class="text-slate-400 leading-relaxed">
+                                Solves exactly-matching issues in standard vector search by combining BM25 keyword search with dense embeddings. A second-stage cross-encoder re-ranks the top 50 results to ensure the most factually relevant context is passed to the generation model.
+                            </p>
+                            <div class="p-4 bg-dark-bg/50 rounded-lg border border-white/5 font-mono text-sm text-purple-300">
+                                ❯ Architecture highlight: Two-stage retrieval + Cohere Re-rank <br>
+                                ❯ Result: 40% reduction in LLM hallucinations
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 px-6 lg:px-12 relative max-w-4xl mx-auto w-full text-center mb-24">
+            <div class="glass-panel p-12 rounded-3xl relative overflow-hidden">
+                <!-- Decorative element -->
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-500/20 rounded-full blur-2xl"></div>
+                
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 relative z-10">Deploy Next-Gen AI</h2>
+                <p class="text-slate-400 mb-8 max-w-xl mx-auto relative z-10 text-lg">
+                    Looking to build production-ready LLM applications without hallucinations? Let's discuss your architecture needs.
+                </p>
+                
+                <!-- HTMX Contact Form (Mockup for now, could be powered by Django backend) -->
+                <form class="space-y-4 max-w-md mx-auto relative z-10" 
+                      x-data="{ submitted: false }" 
+                      @submit.prevent="submitted = true; setTimeout(() => submitted = false, 3000)">
+                    
+                    <div class="relative">
+                        <input type="email" placeholder="hello@company.com" required
+                               class="w-full bg-dark-bg/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors">
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-brand-500 text-dark-bg font-bold py-3 rounded-lg hover:bg-brand-400 transition-colors relative overflow-hidden group">
+                        <span x-show="!submitted">Start Conversation</span>
+                        <span x-show="submitted" style="display: none;" class="flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Message Sent!
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-auto py-8 text-center border-t border-white/5 relative z-10">
+            <p class="text-slate-500 text-sm">
+                Built with Django, Alpine.js & Tailwind CSS. <br class="sm:hidden"/>
+                &copy; 2026 AI_Eng. All rights reserved.
+            </p>
+        </footer>
+    </main>
+
+</body>
+</html>

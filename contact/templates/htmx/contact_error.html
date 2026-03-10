@@ -1,0 +1,11 @@
+<!-- HTMX Error Response -->
+<div id="form-wrapper" class="p-8 mono text-sm leading-relaxed">
+    <div class="space-y-4">
+        <div class="text-[var(--accent-red)] font-bold">
+            [ERROR] Request validation failed. Payload incomplete or malformed.
+        </div>
+        <div class="mt-8 text-[var(--text-secondary)] text-[10px] uppercase tracking-widest">
+            <a href="{% url 'contact' %}" class="underline hover:text-[var(--text-primary)] transition-colors">Retry connection</a>.
+        </div>
+    </div>
+</div>

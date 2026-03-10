@@ -1,0 +1,69 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# === Django ===
+*.log
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+local_settings.py
+
+# === Environment / Secrets ===
+.env
+.env.*
+!.env.example
+
+# === Virtual Environments ===
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# === Node.js ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Build Artifacts ===
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# === macOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# === IDEs / Editors ===
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# === Coverage / Testing ===
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+*.cover
+
+# === Misc ===
+*.bak
+*.tmp
+CLAUDE.md

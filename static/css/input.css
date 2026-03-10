@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+    --color-base: #0D1117;
+    --color-surface: #161B22;
+    --color-elevated: #21262D;
+    --color-bdr: #21262D;
+    --color-text-primary: #E6EDF3;
+    --color-text-secondary: #8B949E;
+    --color-accent-cyan: #00E5FF;
+    --color-accent-orange: #FF6B35;
+    --color-accent-green: #39D353;
+    --color-accent-red: #FF4444;
+    --color-accent-yellow: #FFD700;
+    --color-accent-purple: #BB8FCE;
+
+    --font-mono: "JetBrains Mono", monospace;
+    --font-sans: "Inter", sans-serif;
+    --font-display: "Syne", sans-serif;
+
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 8rem;
+    --text-9xl--line-height: 1;
+    --text-10xl: 10rem;
+    --text-10xl--line-height: 0.85;
+}
+
+/* Base resets & styles for the IDE aesthetic */
+html {
+    background-color: var(--color-base);
+    color: var(--color-text-primary);
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+}
+
+::selection {
+    background-color: var(--color-accent-cyan);
+    color: var(--color-base);
+}
+
+/* Custom Scrollbar to match IDE */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-base);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-elevated);
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-secondary);
+}

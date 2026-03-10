@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Projects | Hassan Mohamed{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-12 flex flex-col gap-8">
+
+    <header class="border-b border-[var(--border)] pb-8">
+        <h1 class="text-4xl font-mono mono text-[var(--accent-orange)] mb-4">
+            > ls ./projects
+        </h1>
+        <p class="text-[var(--text-secondary)]">
+            A living proof-of-work. RAG systems built for enterprise trust, compliance, and minimal hallucination.
+        </p>
+    </header>
+
+    <!-- Filter Chips (HTMX integrated) -->
+    <div class="flex flex-wrap gap-3 font-mono mono text-xs uppercase tracking-widest mb-6" x-data="{ active: 'all' }">
+        <button @click="active = 'all'" hx-get="{% url 'htmx_projects' %}?tag=all" hx-target="#project-grid"
+            hx-swap="innerHTML"
+            :class="active === 'all' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ All ]
+        </button>
+        <button @click="active = 'compliance'" hx-get="{% url 'htmx_projects' %}?tag=compliance"
+            hx-target="#project-grid" hx-swap="innerHTML"
+            :class="active === 'compliance' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ Compliance ]
+        </button>
+        <button @click="active = 'tech'" hx-get="{% url 'htmx_projects' %}?tag=tech" hx-target="#project-grid"
+            hx-swap="innerHTML"
+            :class="active === 'tech' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ Tech ]
+        </button>
+        <button @click="active = 'construction'" hx-get="{% url 'htmx_projects' %}?tag=construction"
+            hx-target="#project-grid" hx-swap="innerHTML"
+            :class="active === 'construction' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ Construction ]
+        </button>
+        <button @click="active = 'hospitality'" hx-get="{% url 'htmx_projects' %}?tag=hospitality"
+            hx-target="#project-grid" hx-swap="innerHTML"
+            :class="active === 'hospitality' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ Hospitality ]
+        </button>
+        <button @click="active = 'youth'" hx-get="{% url 'htmx_projects' %}?tag=youth" hx-target="#project-grid"
+            hx-swap="innerHTML"
+            :class="active === 'youth' ? 'px-4 py-1 border border-[var(--accent-cyan)] text-[var(--accent-cyan)] bg-[var(--accent-cyan)]/10' : 'px-4 py-1 border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--text-secondary)] transition-colors'">
+            [ Youth Protection ]
+        </button>
+    </div>
+
+    <!-- Project Grid -->
+    <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for project in projects %}
+        {% include 'portfolio/components/project_card.html' with project=project %}
+        {% empty %}
+        <div
+            class="col-span-3 py-12 text-center text-[var(--text-secondary)] font-mono mono border border-dashed border-[var(--border)]">
+            No indexed files found.
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

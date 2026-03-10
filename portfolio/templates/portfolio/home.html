@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section id="hero"
+    class="relative min-h-[90vh] flex flex-col md:flex-row items-start px-6 max-w-7xl mx-auto security-grid-pattern">
+
+    <div class="w-full md:w-1/2 pt-6 pb-12">
+        <div class="mb-16">
+            <div class="font-bold tracking-tight"
+                style="font-family:'Syne',sans-serif; color:#00E5FF; font-size:2.25rem; line-height:1; text-shadow: 0 0 30px rgba(0,229,255,0.35);">
+                Nia Intelligence</div>
+            <div class="mono text-xs tracking-widest uppercase mt-1" style="color:#8B949E; letter-spacing:0.18em;">RAG ·
+                AI Security &nbsp;·&nbsp; by hassan.dev</div>
+        </div>
+        <div class="mono text-[var(--accent-orange)] mb-4 text-sm font-bold tracking-widest">// ARCHITECTING TRUST</div>
+        <h1 class="text-5xl md:text-7xl font-bold leading-tight mb-6 glitch-text tracking-tighter">
+            Security-First <br />
+            <span class="text-[var(--accent-cyan)]">AI Engineering.</span>
+        </h1>
+        <p class="text-[var(--text-secondary)] text-lg md:text-xl max-w-xl mb-8 leading-relaxed">
+            I build RAG systems where your data stays yours — encrypted, local-first, offline / online and built with
+            security as the foundation, not an afterthought.
+        </p>
+
+    </div>
+
+    <!-- Terminal Window -->
+    <div class="w-full md:w-1/2 p-4 tilt-wrapper" x-data="{
+            tiltX: 0, tiltY: 0, glowX: 50, glowY: 50,
+            onMove(e) {
+                const r = $el.getBoundingClientRect();
+                const x = e.clientX - r.left;
+                const y = e.clientY - r.top;
+                const cx = r.width / 2;
+                const cy = r.height / 2;
+                this.tiltY = ((x - cx) / cx) * 12;
+                this.tiltX = -((y - cy) / cy) * 9;
+                this.glowX = Math.round((x / r.width) * 100);
+                this.glowY = Math.round((y / r.height) * 100);
+            },
+            onLeave() { this.tiltX = 0; this.tiltY = 0; this.glowX = 50; this.glowY = 50; }
+         }" @mousemove="onMove($event)" @mouseleave="onLeave()">
+        <div class="obsidian-panel terminal-hover rounded-lg overflow-hidden border-[#30363D] shadow-2xl"
+            :style="`transform: rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0); box-shadow: 0 0 0 1px rgba(0,229,255,0.2), ${tiltX !== 0 || tiltY !== 0 ? '0 30px 80px -12px rgba(0,229,255,0.38), 0 10px 30px -8px rgba(0,0,0,0.9)' : '0 10px 30px -8px rgba(0,0,0,0.5)'}`"
+            x-data="{
+                        lines: [
+                            '$ whoami',
+                            'Hassan Mohamed — AI Solutions Architect @ Nia',
+                            '$ ls ./competencies',
+                            '> RAG Pipelines | NIS2 | Multi-Agent Systems | Django 6.0',
+                            '$ cat security_policy.json',
+                            '{ status: \'Security is the architecture\' }',
+                            '$ systemctl status intelligence-core',
+                            '● core.service - Active: running (100% uptime)',
+                            '$ █'
+                        ],
+                        displayed: [],
+                        async init() {
+                            for (let line of this.lines) {
+                                await new Promise(r => setTimeout(r, 800));
+                                this.displayed.push(line);
+                            }
+                        }
+                     }">
+            <div class="bg-[#21262D] px-4 py-2 flex items-center justify-between border-b border-[#30363D]">
+                <div class="flex space-x-2 group">
+                    <div
+                        class="w-3 h-3 rounded-full bg-[#FF5F56] shadow-[0_0_4px_#FF5F5680] flex items-center justify-center cursor-pointer hover:brightness-90 transition-all">
+                        <span
+                            class="opacity-0 group-hover:opacity-100 text-[#7a0000] font-bold leading-none transition-opacity"
+                            style="font-size:7px;">✕</span>
+                    </div>
+                    <div
+                        class="w-3 h-3 rounded-full bg-[#FFBD2E] shadow-[0_0_4px_#FFBD2E80] flex items-center justify-center cursor-pointer hover:brightness-90 transition-all">
+                        <span
+                            class="opacity-0 group-hover:opacity-100 text-[#7a5500] font-bold leading-none transition-opacity"
+                            style="font-size:7px;">−</span>
+                    </div>
+                    <div
+                        class="w-3 h-3 rounded-full bg-[#27C93F] shadow-[0_0_4px_#27C93F80] flex items-center justify-center cursor-pointer hover:brightness-90 transition-all">
+                        <span
+                            class="opacity-0 group-hover:opacity-100 text-[#004d00] font-bold leading-none transition-opacity"
+                            style="font-size:7px;">+</span>
+                    </div>
+                </div>
+                <span class="mono text-[10px] text-[var(--text-secondary)]">bash — hassan@nia-rag-intel</span>
+            </div>
+            <div class="p-6 h-[320px] mono text-sm overflow-y-auto terminal-container">
+                <template x-for="line in displayed">
+                    <div class="mb-2">
+                        <span x-show="line.startsWith('$')" class="text-[var(--accent-green)] mr-2">➜</span>
+                        <span x-text="line"
+                            :class="line.startsWith('$') ? 'text-[var(--text-primary)]' : 'text-[var(--accent-cyan)]'"></span>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Manifesto Strip -->
+<div class="sr bg-[var(--bg-base)]/10 border-y border-[var(--accent-red)]/30 py-4 overflow-hidden whitespace-nowrap"
+    x-data x-intersect="$el.classList.add('visible')">
+    <div
+        class="flex space-x-12 animate-marquee mono text-xs font-bold tracking-[0.2em] text-[var(--accent-red)] uppercase items-center">
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> GDPR
+            Compliant
+            by Design</span>
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> NIS2 Aligned
+            Architecture</span>
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> ISO 27001
+            Referenced</span>
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> OWASP LLM
+            Top
+            10 Mitigated</span>
+        <!-- Duplicate for seamless loop -->
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> GDPR
+            Compliant
+            by Design</span>
+        <span><span class="inline-block w-2 h-2 bg-[var(--accent-red)] rounded-full mr-2 pulse-red"></span> NIS2 Aligned
+            Architecture</span>
+    </div>
+</div>
+
+<!-- Project Filter (HTMX Placeholder) -->
+<section id="projects" class="max-w-7xl mx-auto px-6 py-24">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div class="sr" x-data x-intersect="$el.classList.add('visible')">
+            <h2 class="mono text-3xl font-bold mb-4 flex items-center">
+                <span class="text-[var(--accent-orange)] mr-4">></span> Selected_Deployments
+            </h2>
+            <p class="text-[var(--text-secondary)] max-w-xl">
+                Proof-of-work showcasing specialized AI solutions for Benelux enterprise and SMB markets.
+            </p>
+        </div>
+        <div class="sr flex flex-wrap gap-2 mono text-[10px]" style="--sr-delay:0.15s"
+            x-data="{ active: 'all' }"
+            x-intersect="$el.classList.add('visible')">
+
+            <button
+                hx-get="{% url 'htmx_projects' %}?tag=all"
+                hx-target="#project-grid"
+                hx-swap="innerHTML"
+                @click="active = 'all'; document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                :class="active === 'all'
+                    ? 'border-[var(--accent-cyan)] bg-[var(--accent-cyan)] text-black'
+                    : 'border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]'"
+                class="px-4 py-2 border transition-all cursor-pointer">
+                ALL_SYSTEMS
+            </button>
+
+            <button
+                hx-get="{% url 'htmx_projects' %}?tag=tech"
+                hx-target="#project-grid"
+                hx-swap="innerHTML"
+                @click="active = 'tech'; document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                :class="active === 'tech'
+                    ? 'border-[var(--accent-cyan)] bg-[var(--accent-cyan)] text-black'
+                    : 'border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]'"
+                class="px-4 py-2 border transition-all cursor-pointer">
+                RAG_ARCH
+            </button>
+
+            <button
+                hx-get="{% url 'htmx_projects' %}?tag=compliance"
+                hx-target="#project-grid"
+                hx-swap="innerHTML"
+                @click="active = 'compliance'; document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                :class="active === 'compliance'
+                    ? 'border-[var(--accent-cyan)] bg-[var(--accent-cyan)] text-black'
+                    : 'border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]'"
+                class="px-4 py-2 border transition-all cursor-pointer">
+                COMPLIANCE
+            </button>
+
+            <button
+                hx-get="{% url 'htmx_projects' %}?tag=other"
+                hx-target="#project-grid"
+                hx-swap="innerHTML"
+                @click="active = 'other'; document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                :class="active === 'other'
+                    ? 'border-[var(--accent-cyan)] bg-[var(--accent-cyan)] text-black'
+                    : 'border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--accent-cyan)] hover:text-[var(--accent-cyan)]'"
+                class="px-4 py-2 border transition-all cursor-pointer">
+                SECURITY_ONLY
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Project Grid -->
+    <div id="project-grid" class="sr grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="--sr-delay:0.25s"
+        x-data x-intersect="$el.classList.add('visible')">
+        {% for project in projects %}
+        {% include 'portfolio/components/project_card.html' with project=project %}
+        {% empty %}
+        <p class="text-[var(--text-secondary)] mono">No featured projects found.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Technical Deep Dive Tab Section (Alpine.js) -->
+<section id="architecture" class="bg-[var(--bg-surface)] py-24 border-y border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div class="sr-left" x-data x-intersect="$el.classList.add('visible')">
+                <h2 class="mono text-3xl font-bold mb-8">// NIA_ARCHITECTURE_MODEL</h2>
+                <div class="flex border-b border-[var(--border)] mb-8">
+                    <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'tab-active' : ''"
+                        class="pb-4 px-6 mono text-xs uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all">Overview</button>
+                    <button @click="activeTab = 'security'" :class="activeTab === 'security' ? 'tab-active' : ''"
+                        class="pb-4 px-6 mono text-xs uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all">Security_Model</button>
+                    <button @click="activeTab = 'stack'" :class="activeTab === 'stack' ? 'tab-active' : ''"
+                        class="pb-4 px-6 mono text-xs uppercase tracking-widest text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all">Tech_Stack</button>
+                </div>
+
+                <div x-show="activeTab === 'overview'" x-transition class="space-y-6">
+                    <p class="text-[var(--text-secondary)] leading-relaxed">
+                        Our multi-agent RAG system is built on a foundation of <strong>Structured Output
+                            Validation</strong>. Unlike standard implementations, every LLM response is validated
+                        through Pydantic models before reaching the end-user.
+                    </p>
+                    <ul class="space-y-4 mono text-sm">
+                        <li class="flex items-start"><span class="text-[var(--accent-green)] mr-3">✔</span>
+                            Multi-Framework Knowledge base (NIS2/GDPR)</li>
+                        <li class="flex items-start"><span class="text-[var(--accent-green)] mr-3">✔</span> Air-gapped
+                            deployment capability</li>
+                        <li class="flex items-start"><span class="text-[var(--accent-green)] mr-3">✔</span> Chunk-level
+                            provenance tracking</li>
+                    </ul>
+                </div>
+
+                <div x-show="activeTab === 'security'" x-transition class="space-y-6">
+                    <div class="bg-black/40 p-6 border-l-4 border-[var(--accent-red)] rounded">
+                        <h4 class="mono text-[var(--accent-red)] text-sm font-bold mb-4 uppercase">Threat Mitigation:
+                            RAG Poisoning</h4>
+                        <p class="text-[var(--text-secondary)] text-sm mb-4">We defend against malicious document
+                            injection through a multi-stage ingestion validation pipeline.</p>
+                        <div class="w-full bg-[var(--bg-elevated)] h-2 rounded-full overflow-hidden">
+                            <div class="bg-[var(--accent-red)] h-full w-[85%]"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 mono text-[10px]">
+                            <span>Vulnerability Score</span>
+                            <span>REDUCED 85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div x-show="activeTab === 'stack'" x-transition>
+                    <div class="grid grid-cols-2 gap-3 mono text-xs">
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg hover:border-[var(--accent-cyan)] transition-colors">
+                            <div class="text-[var(--accent-cyan)] mb-2 font-bold">CORE_BACKEND</div>
+                            <div class="text-[var(--text-secondary)]">Django 6.0 + HTMX</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg hover:border-[var(--accent-cyan)] transition-colors">
+                            <div class="text-[var(--accent-cyan)] mb-2 font-bold">AI_ORCHESTRATOR</div>
+                            <div class="text-[var(--text-secondary)]">Pydantic AI · structured validation</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--accent-red)]/40 rounded-lg hover:border-[var(--accent-red)] transition-colors">
+                            <div class="text-[var(--accent-red)] mb-2 font-bold">ENCRYPTION</div>
+                            <div class="text-[var(--text-secondary)]">Fernet AES-128 · CBC mode</div>
+                            <div class="text-[10px] text-[var(--accent-red)]/60 mt-1">django-secured-fields · 2026 gold
+                                standard</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg hover:border-[var(--accent-cyan)] transition-colors">
+                            <div class="text-[var(--accent-cyan)] mb-2 font-bold">VECTOR_DB</div>
+                            <div class="text-[var(--text-secondary)]">Qdrant (Embedded)</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--accent-orange)]/40 rounded-lg hover:border-[var(--accent-orange)] transition-colors">
+                            <div class="text-[var(--accent-orange)] mb-2 font-bold">GUARDRAILS</div>
+                            <div class="text-[var(--text-secondary)]">NeMo Guardrails · guardrails-ai</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg hover:border-[var(--accent-cyan)] transition-colors">
+                            <div class="text-[var(--accent-cyan)] mb-2 font-bold">ML_SECURITY</div>
+                            <div class="text-[var(--text-secondary)]">scikit-learn · anomaly detection</div>
+                        </div>
+                        <div
+                            class="p-4 bg-[var(--bg-elevated)] border border-[var(--border)] rounded-lg hover:border-[var(--accent-green)] transition-colors col-span-2">
+                            <div class="text-[var(--accent-green)] mb-2 font-bold">INFRASTRUCTURE</div>
+                            <div class="text-[var(--text-secondary)]">Railway cloud · On-Prem air-gapped · AES-encrypted
+                                embeddings at rest</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Representation: File Tree / Exploded View -->
+            <div class="sr-right" style="--sr-delay:0.2s" x-data x-intersect="$el.classList.add('visible')">
+                <div class="tilt-wrapper" x-data="{
+                        tiltX: 0, tiltY: 0,
+                        onMove(e) {
+                            const r = $el.getBoundingClientRect();
+                            const x = e.clientX - r.left, y = e.clientY - r.top;
+                            this.tiltY = ((x - r.width/2) / (r.width/2)) * 10;
+                            this.tiltX = -((y - r.height/2) / (r.height/2)) * 7;
+                        },
+                        onLeave() { this.tiltX = 0; this.tiltY = 0; }
+                    }" @mousemove="onMove($event)" @mouseleave="onLeave()">
+                    <div class="obsidian-panel p-8 rounded-xl border-[#30363D] terminal-hover"
+                        :style="`transform: rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0); box-shadow: 0 0 0 1px rgba(0,229,255,0.15), ${tiltX !== 0 || tiltY !== 0 ? '0 30px 80px -12px rgba(0,229,255,0.25), 0 10px 30px -8px rgba(0,0,0,0.9)' : '0 10px 30px -8px rgba(0,0,0,0.5)'}`">
+                        <div class="mono text-[10px] text-[var(--text-secondary)] mb-6 uppercase tracking-widest">
+                            System_Structure_Explorer</div>
+                        <div class="space-y-4 mono text-sm">
+                            <div class="flex items-center text-[var(--accent-purple)]">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z">
+                                    </path>
+                                </svg>
+                                apps/portfolio/
+                            </div>
+                            <div
+                                class="ml-6 flex items-center text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] cursor-pointer">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z">
+                                    </path>
+                                </svg>
+                                security_auditor.py
+                            </div>
+                            <div class="ml-6 flex items-center text-[var(--accent-cyan)]">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z">
+                                    </path>
+                                </svg>
+                                rag_chain_definition.py
+                            </div>
+                            <div class="ml-6 flex items-center text-[var(--text-secondary)]">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z">
+                                    </path>
+                                </svg>
+                                compliance_mapper.ts
+                            </div>
+                            <div class="flex items-center text-[var(--accent-purple)]">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z">
+                                    </path>
+                                </svg>
+                                data_vault/
+                            </div>
+                            <div class="ml-6 flex items-center text-[var(--accent-red)]">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z">
+                                    </path>
+                                </svg>
+                                encrypted_embeddings.idx
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
+
+<!-- CLI Contact Form -->
+<section id="contact" class="max-w-4xl mx-auto px-6 py-24">
+    <div class="sr-scale obsidian-panel rounded-lg overflow-hidden border-[#30363D]" x-data
+        x-intersect="$el.classList.add('visible')">
+        <div class="bg-[#21262D] px-6 py-4 flex items-center justify-between">
+            <span
+                class="mono text-sm font-bold tracking-widest text-[var(--accent-cyan)]">./establish_secure_comms.sh</span>
+            <div class="flex space-x-2">
+                <div class="w-2 h-2 bg-[var(--accent-green)] rounded-full animate-pulse"></div>
+            </div>
+        </div>
+        <div class="p-10" id="contact-form-wrapper">
+            <form hx-post="{% url 'htmx_contact_submit' %}" hx-target="#contact-form-wrapper" hx-swap="innerHTML"
+                class="space-y-8">
+                {% csrf_token %}
+                <div class="space-y-2">
+                    <label class="mono text-xs uppercase text-[var(--text-secondary)] block">$ enter_name:</label>
+                    <input type="text" name="name"
+                        class="w-full bg-black/30 border border-[var(--border)] rounded p-4 mono text-sm focus:border-[var(--accent-cyan)] focus:outline-none transition-all"
+                        placeholder="IDENTIFY YOURSELF" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="mono text-xs uppercase text-[var(--text-secondary)] block">$ enter_email:</label>
+                    <input type="email" name="email"
+                        class="w-full bg-black/30 border border-[var(--border)] rounded p-4 mono text-sm focus:border-[var(--accent-cyan)] focus:outline-none transition-all"
+                        placeholder="ENCRYPTION_KEY@DOMAIN.COM" required>
+                </div>
+                <div class="space-y-2">
+                    <label class="mono text-xs uppercase text-[var(--text-secondary)] block">$ describe_project:</label>
+                    <textarea name="message"
+                        class="w-full bg-black/30 border border-[var(--border)] rounded p-4 mono text-sm h-32 focus:border-[var(--accent-cyan)] focus:outline-none transition-all"
+                        placeholder="SYSTEM_SPECIFICATIONS" required></textarea>
+                </div>
+                <button type="submit"
+                    class="w-full bg-transparent border-2 border-[var(--accent-cyan)] text-[var(--accent-cyan)] py-4 mono font-bold hover:bg-[var(--accent-cyan)] hover:text-black transition-all uppercase tracking-widest">
+                    [ Submit_To_Vault ]
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

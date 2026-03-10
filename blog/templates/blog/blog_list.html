@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Engineering Log | Hassan Mohamed{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12 flex flex-col gap-12">
+
+    <!-- Header -->
+    <header class="border-b border-[var(--border)] pb-8 flex justify-between items-end">
+        <div>
+            <h1 class="text-4xl font-mono mono text-[var(--accent-orange)] mb-4">
+                > tail -f /var/log/engineering
+            </h1>
+            <p class="text-[var(--text-secondary)]">
+                Essays on security-first AI, offline RAG, and compliance engineering.
+            </p>
+        </div>
+        <a href="{% url 'blog-feed' %}"
+            class="hidden sm:flex items-center gap-2 px-3 py-1 border border-[var(--accent-orange)] text-[var(--accent-orange)] hover:bg-[var(--accent-orange)]/10 font-mono mono text-xs uppercase tracking-widest transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                    d="M6.18,15.64A2.18,2.18 0 0,1 8.36,17.82C8.36,19 7.38,20 6.18,20C5,20 4,19 4,17.82A2.18,2.18 0 0,1 6.18,15.64M4,4.44A15.56,15.56 0 0,1 19.56,20H16.73A12.73,12.73 0 0,0 4,7.27V4.44M4,10.1A9.9,9.9 0 0,1 13.9,20H11.07A7.07,7.07 0 0,0 4,12.93V10.1Z" />
+            </svg>
+            [ RSS ]
+        </a>
+    </header>
+
+    <!-- Post List -->
+    <div class="space-y-8">
+        {% for post in posts %}
+        <article
+            class="group obsidian-panel rounded-lg p-6 hover:border-[var(--accent-cyan)] transition-colors relative overflow-hidden">
+            <div class="h-1 w-full bg-[var(--accent-purple)] absolute top-0 left-0 hidden group-hover:block">
+            </div>
+
+            <div class="flex justify-between items-start mb-4">
+                <h2 class="text-2xl font-mono mono text-[var(--accent-cyan)] group-hover:underline">
+                    <a href="{% url 'blog-detail' post.slug %}" class="after:absolute after:inset-0">
+                        {{ post.title }}
+                    </a>
+                </h2>
+                <time class="text-[var(--text-secondary)] font-mono mono text-sm whitespace-nowrap ml-4">
+                    {{ post.created_at|date:"Y-m-d" }}
+                </time>
+            </div>
+
+            <!-- Quick preview (truncating raw markdown or using stripped tags if possible) -->
+            <p class="text-[var(--text-primary)] text-sm mb-6 line-clamp-3">
+                {{ post.body|truncatewords:40 }}
+            </p>
+
+            <div class="flex flex-wrap gap-2 relative z-10">
+                {% for tag in post.tags.all %}
+                <span
+                    class="text-xs font-mono mono text-[var(--accent-orange)] border border-[var(--accent-orange)]/30 bg-[var(--accent-orange)]/10 px-2 py-1">
+                    {{ tag.name }}
+                </span>
+                {% endfor %}
+            </div>
+        </article>
+        {% empty %}
+        <div
+            class="py-12 text-center text-[var(--text-secondary)] font-mono mono border border-dashed border-[var(--border)]">
+            Log file empty. No entries written yet.
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

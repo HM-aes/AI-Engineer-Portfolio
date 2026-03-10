@@ -1,0 +1,30 @@
+/* Custom base styles beyond Tailwind */
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155; 
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569; 
+}
+
+/* Base text selection */
+::selection {
+    background-color: rgba(20, 184, 166, 0.3); /* brand-500/30 */
+    color: white;
+}
