@@ -1,0 +1,12 @@
+asgiref==3.11.1
+Django==6.0.3
+django-csp==4.0
+django-environ==0.13.0
+django-markdownx==4.0.9
+Markdown==3.10.2
+packaging==26.0
+pillow==12.1.1
+psycopg2-binary==2.9.11
+sqlparse==0.5.5
+whitenoise==6.12.0
+gunicorn==22.0.0
