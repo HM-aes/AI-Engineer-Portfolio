@@ -31,9 +31,9 @@ if _env_file.exists():
     environ.Env.read_env(_env_file)
 
 # Read SECRET_KEY directly from os.environ to bypass any django-environ quirks.
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
-if not SECRET_KEY:
-    raise Exception("DJANGO_SECRET_KEY environment variable is not set. Add it in Railway → Variables.")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-fallback-key-set-DJANGO_SECRET_KEY-in-railway-variables")
+if SECRET_KEY == "insecure-fallback-key-set-DJANGO_SECRET_KEY-in-railway-variables":
+    print("WARNING: DJANGO_SECRET_KEY is not set! Set it in Railway → Variables.")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
