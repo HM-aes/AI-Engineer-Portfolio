@@ -8,6 +8,3 @@ healthcheckTimeout = 120
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
 
-[deploy.envVars]
-DJANGO_SETTINGS_MODULE = "config.settings.production"
-
