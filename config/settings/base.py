@@ -25,12 +25,15 @@ import os
 env = environ.Env(DEBUG=(bool, False))
 
 # Read .env file if it exists (local dev). In production (Railway) env vars
-# are injected directly — no .env file is present and that is fine.
+# are injected directly into os.environ — no .env file needed.
 _env_file = BASE_DIR / ".env"
 if _env_file.exists():
     environ.Env.read_env(_env_file)
 
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+# Read SECRET_KEY directly from os.environ to bypass any django-environ quirks.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    raise Exception("DJANGO_SECRET_KEY environment variable is not set. Add it in Railway → Variables.")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
