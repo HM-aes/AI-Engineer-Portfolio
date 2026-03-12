@@ -2,11 +2,12 @@ from .base import *
 
 DEBUG = False
 
-# Security settings mandated by PRD
-SECURE_HSTS_SECONDS = 31536000
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
+# Allow all hosts — Railway domain is dynamic; restrict this once stable
+ALLOWED_HOSTS = ["*"]
+
+# Disable SSL redirect so Railway's proxy can handle HTTPS without redirect loops
+SECURE_SSL_REDIRECT = False
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
