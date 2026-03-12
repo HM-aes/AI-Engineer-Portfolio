@@ -24,7 +24,11 @@ import os
 
 env = environ.Env(DEBUG=(bool, False))
 
-environ.Env.read_env(BASE_DIR / ".env")
+# Read .env file if it exists (local dev). In production (Railway) env vars
+# are injected directly — no .env file is present and that is fine.
+_env_file = BASE_DIR / ".env"
+if _env_file.exists():
+    environ.Env.read_env(_env_file)
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
