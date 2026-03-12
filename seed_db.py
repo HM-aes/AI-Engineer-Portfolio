@@ -2,6 +2,7 @@ import os
 import django
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+
 django.setup()
 
 from portfolio.models import Project, SecurityModel, TechTag
