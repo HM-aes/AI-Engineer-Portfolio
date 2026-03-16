@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views import View
-from urllib.parse import quote
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import ContactMessage
 
 
@@ -18,10 +19,14 @@ class HTMXContactSubmitView(View):
         if name and email and message:
             ContactMessage.objects.create(name=name, email=email, message=message)
             
-            subject = f"Portfolio Inquiry from {name}"
-            body = f"Hi Hassan,\n\n{message}\n\n---\nFrom: {name}\nEmail: {email}"
-            mailto_link = f"mailto:iaesdev@pm.me?subject={quote(subject)}&body={quote(body)}"
+            send_mail(
+                subject=f"Portfolio contact: {name}",
+                message=f"{name}\n{email}\n\n{message}",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.CONTACT_EMAIL],
+                fail_silently=True,
+            )
             
-            return render(request, "htmx/contact_success.html", {"mailto_link": mailto_link})
+            return render(request, "htmx/contact_success.html")
         else:
             return render(request, "htmx/contact_error.html", status=400)

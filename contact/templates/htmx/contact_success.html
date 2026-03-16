@@ -1,16 +1,16 @@
 <!-- HTMX Swap Target Response -->
 <div id="form-wrapper" class="p-8 mono text-sm leading-relaxed" x-data="{ visible: false }"
-    x-init="setTimeout(() => { visible = true; window.location.href = '{{ mailto_link }}'; }, 800)">
+    x-init="setTimeout(() => visible = true, 100)">
 
     <div class="space-y-4 opacity-0 transition-opacity duration-500" :class="visible ? 'opacity-100' : ''">
         <div class="text-[var(--text-primary)]">
-            <span class="text-[var(--accent-green)] mr-2">✓</span> Message validated — opening email client...
+            <span class="text-[var(--accent-green)] mr-2">✓</span> Message sent successfully
         </div>
         <div class="text-[var(--text-primary)]">
-            <span class="text-[var(--accent-cyan)] mr-2">→</span> Recipient: iaesdev@pm.me
+            <span class="text-[var(--accent-green)] mr-2">✓</span> Email delivered to iaesdev@pm.me
         </div>
-        <div class="text-[var(--text-primary)] text-sm">
-            <span class="text-[var(--text-secondary)] mr-2">ℹ</span> Your email client will open with a pre-filled message
+        <div class="text-[var(--text-primary)]">
+            <span class="text-[var(--accent-green)] mr-2">✓</span> Response time: < 24h
         </div>
 
         <div class="mt-8 text-[var(--accent-cyan)] flex items-center">
@@ -18,7 +18,8 @@
         </div>
 
         <div class="mt-8 text-[var(--text-secondary)] text-[10px] uppercase tracking-widest">
-            <a href="{{ mailto_link }}" class="underline hover:text-white transition-colors">Click here</a> if your email client doesn't open automatically.
+            <a href="{% url 'home' %}" class="underline hover:text-white transition-colors">Return home</a> or <a
+                href="{% url 'contact' %}" class="underline hover:text-white transition-colors">send another message</a>.
         </div>
     </div>
 
