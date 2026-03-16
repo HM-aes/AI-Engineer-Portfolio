@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views import View
-from django.http import HttpResponse
 from urllib.parse import quote
 from .models import ContactMessage
 
@@ -19,8 +18,8 @@ class HTMXContactSubmitView(View):
         if name and email and message:
             ContactMessage.objects.create(name=name, email=email, message=message)
             
-            subject = f"Portfolio Contact from {name}"
-            body = f"Name: {name}\nEmail: {email}\n\nMessage:\n{message}"
+            subject = f"Portfolio Inquiry from {name}"
+            body = f"Hi Hassan,\n\n{message}\n\n---\nFrom: {name}\nEmail: {email}"
             mailto_link = f"mailto:iaesdev@pm.me?subject={quote(subject)}&body={quote(body)}"
             
             return render(request, "htmx/contact_success.html", {"mailto_link": mailto_link})

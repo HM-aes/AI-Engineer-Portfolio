@@ -162,3 +162,16 @@ CSP_SCRIPT_SRC = (
 )
 # Note: we add unsafe-inline for Alpine inline handlers for now.
 # PRD calls out 'unsafe-inline except Alpine.js nonce'. We'll config CSP later to be strict.
+
+# Email Configuration
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend"
+)
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@example.com")
+CONTACT_EMAIL = "iaesdev@pm.me"
