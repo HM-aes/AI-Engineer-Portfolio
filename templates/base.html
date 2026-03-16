@@ -246,8 +246,18 @@
     </style>
 </head>
 
-<body x-data="{ mobileMenu: false, activeTab: 'overview' }" x-init="window.scrollTo({top:0,behavior:'instant'})"
+<body x-data="{ mobileMenu: false, activeTab: 'overview' }"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <script>
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+        window.addEventListener('beforeunload', () => {
+            window.scrollTo(0, 0);
+        });
+        window.scrollTo(0, 0);
+    </script>
 
     <!-- Global Scanline Overlay -->
     <div class="scanline"></div>
