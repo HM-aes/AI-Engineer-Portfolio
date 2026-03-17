@@ -1,9 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" style="scroll-behavior: auto;">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <script>history.scrollRestoration = 'manual';</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}hassan.dev — AI Engineering for Benelux{% endblock %}</title>
 
@@ -249,19 +250,6 @@
 <body x-data="{ mobileMenu: false, activeTab: 'overview' }"
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
-    <script>
-        history.scrollRestoration = 'manual';
-    </script>
-    <style>body { opacity: 0; }</style>
-    <script>
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        requestAnimationFrame(() => {
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-            document.body.style.opacity = '1';
-        });
-    </script>
 
     <!-- Global Scanline Overlay -->
     <div class="scanline"></div>
