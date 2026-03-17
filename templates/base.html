@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="scroll-behavior: auto;">
 
 <head>
     <meta charset="UTF-8">
@@ -250,10 +250,17 @@
     hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
     <script>
-        // Force instant scroll to top on page load
         history.scrollRestoration = 'manual';
+    </script>
+    <style>body { opacity: 0; }</style>
+    <script>
         document.documentElement.scrollTop = 0;
         document.body.scrollTop = 0;
+        requestAnimationFrame(() => {
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+            document.body.style.opacity = '1';
+        });
     </script>
 
     <!-- Global Scanline Overlay -->
